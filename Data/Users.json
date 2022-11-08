@@ -1,0 +1,57 @@
+[
+    {
+        "id": 1,
+        "username": "ivan@gmail.com",
+        "password": "ivanbravoam",
+        "name": "23",
+        "lastname": "Owner",
+        "dni": "Ivan",
+        "phone": "Bravo",
+        "email": "123123",
+        "userType": "510983280"
+    },
+    {
+        "id": 2,
+        "username": "admin",
+        "password": "123456",
+        "name": "ivan",
+        "lastname": "smith",
+        "dni": "12312",
+        "phone": "12222",
+        "email": "ivan@gmail.com",
+        "userType": "Owner"
+    },
+    {
+        "id": 3,
+        "username": "ivanbravo",
+        "password": "1234",
+        "name": "Ivan",
+        "lastname": "Belfort",
+        "dni": "46546",
+        "phone": "45555",
+        "email": "student@utn.com",
+        "userType": "Owner"
+    },
+    {
+        "id": 4,
+        "username": "bbking",
+        "password": "1234",
+        "name": "B.B",
+        "lastname": "King",
+        "dni": "1212111",
+        "phone": "555505",
+        "email": "ivanleehooker@gmail.com",
+        "userType": "Keeper"
+    },
+    {
+        "id": 5,
+        "username": "johnk",
+        "password": "1234",
+        "name": "John",
+        "lastname": "Keeper",
+        "dni": "4565",
+        "phone": "122222505",
+        "email": "jk@gmail.com",
+        "userType": "Keeper"
+    }
+]

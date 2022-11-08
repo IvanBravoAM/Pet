@@ -1,0 +1,26 @@
+[
+    {
+        "keeperId": 1,
+        "userId": 4,
+        "petSize": "Big",
+        "initialDate": "2022-11-08",
+        "endDate": "2022-11-15",
+        "days": [
+            "sunday"
+        ],
+        "price": "2000",
+        "isActive": true
+    },
+    {
+        "keeperId": 2,
+        "userId": 4,
+        "petSize": "Big",
+        "initialDate": "2022-11-08",
+        "endDate": "2022-11-15",
+        "days": [
+            "wednesday"
+        ],
+        "price": "2000",
+        "isActive": true
+    }
+]

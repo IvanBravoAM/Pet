@@ -1,0 +1,68 @@
+[
+    {
+        "id": 14,
+        "idOwner": 3,
+        "idKeeper": "1",
+        "idPet": "3",
+        "initialDate": "2022-11-13",
+        "endDate": "2022-11-13",
+        "days": "sunday",
+        "totalPrice": "2000",
+        "status": "created"
+    },
+    {
+        "id": 15,
+        "idOwner": 3,
+        "idKeeper": "1",
+        "idPet": "3",
+        "initialDate": "2022-11-13",
+        "endDate": "2022-11-13",
+        "days": "sunday",
+        "totalPrice": "2000",
+        "status": "created"
+    },
+    {
+        "id": 13,
+        "idOwner": 3,
+        "idKeeper": "1",
+        "idPet": "3",
+        "initialDate": "2022-11-13",
+        "endDate": "2022-11-13",
+        "days": "sunday",
+        "totalPrice": "2000",
+        "status": "confirmed"
+    },
+    {
+        "id": 17,
+        "idOwner": 3,
+        "idKeeper": "2",
+        "idPet": "3",
+        "initialDate": "2022-11-08",
+        "endDate": "2022-11-08",
+        "days": "wednesday",
+        "totalPrice": "2000",
+        "status": "created"
+    },
+    {
+        "id": 16,
+        "idOwner": 3,
+        "idKeeper": "1",
+        "idPet": "3",
+        "initialDate": "2022-11-13",
+        "endDate": "2022-11-13",
+        "days": "sunday",
+        "totalPrice": "2000",
+        "status": "confirmed"
+    },
+    {
+        "id": 18,
+        "idOwner": 3,
+        "idKeeper": "1",
+        "idPet": "5",
+        "initialDate": "2022-11-10",
+        "endDate": "2022-11-10",
+        "days": "sunday",
+        "totalPrice": "2000",
+        "status": "confirmed"
+    }
+]

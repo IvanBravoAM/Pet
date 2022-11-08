@@ -1,0 +1,67 @@
+[
+    {
+        "id": 1,
+        "userId": 3,
+        "petType": 2,
+        "name": "Johnson",
+        "breed": "German Shepard",
+        "size": "Big",
+        "description": "tremendo pastor aleman",
+        "photo": null,
+        "vaccines": null,
+        "video": null,
+        "isActive": true
+    },
+    {
+        "id": 2,
+        "userId": 3,
+        "petType": 2,
+        "name": "Juan",
+        "breed": "cruza",
+        "size": "Medium",
+        "description": "juan tiene un perro q se llama juan",
+        "photo": null,
+        "vaccines": null,
+        "video": null,
+        "isActive": true
+    },
+    {
+        "id": 3,
+        "userId": 3,
+        "petType": 2,
+        "name": "Susy",
+        "breed": "Sausage",
+        "size": "Small",
+        "description": "tremenda sausage",
+        "photo": null,
+        "vaccines": null,
+        "video": null,
+        "isActive": true
+    },
+    {
+        "id": 4,
+        "userId": 2,
+        "petType": 2,
+        "name": "Carlos",
+        "breed": "cruza",
+        "size": "Small",
+        "description": "carlos el perro",
+        "photo": null,
+        "vaccines": null,
+        "video": null,
+        "isActive": true
+    },
+    {
+        "id": 5,
+        "userId": 3,
+        "petType": 2,
+        "name": "perro1",
+        "breed": "German Shepard",
+        "size": "Big",
+        "description": "dewcripciopn",
+        "photo": null,
+        "vaccines": null,
+        "video": null,
+        "isActive": true
+    }
+]
