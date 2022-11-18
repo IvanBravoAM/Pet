@@ -34,7 +34,7 @@
 
         public function Login($userName, $password) {
             $userController=new UserController();
-            $user= $userController->UserDAO->GetByUserName($userName);
+            $user= $userController->UserDAO->GetByUsername($userName);
             
             if(($user != null) && ($user->getPassword() === $password))
             {

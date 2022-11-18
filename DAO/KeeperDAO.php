@@ -8,6 +8,7 @@ class KeeperDAO implements IKeeperDAO
 
         private $keepersList = array();
 		private $filename = ROOT . "Data/Keepers.json";
+		private $tablename ='keeper';
 
 		public function add(Keeper $keeper)
 		{
@@ -17,6 +18,86 @@ class KeeperDAO implements IKeeperDAO
 			array_push($this->keepersList, $keeper);
 			$this->saveData();
 		}
+
+		public function AddBD(Keeper $keeper){
+            $response=null;
+            try{
+                $query = "INSERT INTO " .$this->tablename."(userId, petSize, initialDate, endDate, days, price, isActive) VALUES ( :userId, :petSize, :initialDate, :endDate, :days, :price, :isActive);";
+    
+				$parameters["userId"] = $keeper->getUserId();
+				$parameters["petSize"] = $keeper->getPetSize();
+				$parameters["initialDate"] = $keeper->getInitialDate();
+				$parameters["endDate"] = $keeper->getEndDate();
+				$parameters["days"] = $keeper->getDays();
+				$parameters["price"] = $keeper->getPrice();
+                $parameters["isActive"] = $keeper->getIsActive();
+    
+                $this->connection= Connection::GetInstance();
+    
+                $responseConnection = $this->connection->ExecuteNonQuery($query, $parameters);
+                return "Se han modificado".$responseConnection."filas";
+    
+            }
+            catch(Exception $ex){
+                throw $ex;
+                return "Error al insertar ".$this->responseConnection->getMessage();
+            }
+        }
+
+		private function GetAllBD()
+		{
+			$keepersList = array();
+            $query = "SELECT * FROM " . $this->tableName;
+            $this->connection = Connection::getInstance();
+            $resultSet = $this->connection->Execute($query);
+		
+			foreach($resultSet as $valuesArray)
+			{
+				$keeper = new Keeper();
+				$keeper->setKeeperId($valuesArray["keeperId"]);
+				$keeper->setUserId($valuesArray["userId"]);
+				$keeper->setPetSize($valuesArray["petSize"]);
+				$keeper->setInitialDate($valuesArray["initialDate"]);
+				$keeper->setEndDate($valuesArray["endDate"]);
+				$keeper->setDays($valuesArray["days"]);
+				$keeper->setPrice($valuesArray["price"]);
+				$keeper->setIsActive($valuesArray["isActive"]);					
+							
+				array_push($this->keepersList, $keeper);
+			}
+			
+		}
+
+		public function getByKeeperIdBD($keeperId) 
+        {
+        try
+        {
+
+            $query = "SELECT * FROM ".$this->tableName. "WHERE (keeperId = {$keeperId})";
+            
+            $parameters['keeperId'] = $keeperId;
+
+            $this->connection = Connection::GetInstance();
+
+            $resultSet = $this->connection->Execute($query, $parameters);
+            
+            $keeper = new Keeper();
+			$keeper->setKeeperId($valuesArray["keeperId"]);
+			$keeper->setUserId($valuesArray["userId"]);
+			$keeper->setPetSize($valuesArray["petSize"]);
+			$keeper->setInitialDate($valuesArray["initialDate"]);
+			$keeper->setEndDate($valuesArray["endDate"]);
+			$keeper->setDays($valuesArray["days"]);
+			$keeper->setPrice($valuesArray["price"]);
+			$keeper->setIsActive($valuesArray["isActive"]);
+
+            return $keeper;
+        }
+        catch(\PDOException $ex)
+        {
+            throw $ex;
+        }
+        }
 
 		private function saveData()
 		{

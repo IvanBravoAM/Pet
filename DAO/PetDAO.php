@@ -24,9 +24,9 @@ class PetDAO implements IPetDAO {
     public function AddBD(Pet $pet){
         $response=null;
         try{
-            $query = "INSERT INTO " .$this->tablename."(userId, petType, breed, size, description, photo, vaccines, video, isActive) VALUES ( :userId, :petType, :breed, :size, :description, :photo, :vaccines, :video, :isActive);";
+            $query = "INSERT INTO " .$this->tablename."(userId, petType, name, breed, size, description, photo, vaccines, video, isActive) VALUES ( :userId, :petType, :name, :breed, :size, :description, :photo, :vaccines, :video, :isActive);";
 
-            $parameters["id"] = $pet->getId();
+            // $parameters["id"] = $pet->getId();
             $parameters["userId"] = $pet->getUserId();
             $parameters["petType"] = $pet->getPetType()->getId();
             $parameters["name"] = $pet->getName();
@@ -49,6 +49,91 @@ class PetDAO implements IPetDAO {
             return "Error al insertar ".$this->responseConnection->getMessage();
         }
     }
+
+    public function GetAllBD() {
+        try {
+            $petList = array();
+            $query = "SELECT * FROM " . $this->tableName;
+            $this->connection = Connection::getInstance();
+            $resultSet = $this->connection->Execute($query);
+
+            foreach ($resultSet as $arrayValues)
+            {      
+                $petType = new PetType();
+                $petType->setId($arrayValues["petType"]);
+
+                $pet = new Pet();
+                $pet->setId($arrayValues["id"]);
+                $pet->setUserId($arrayValues["userId"]);
+                $pet->setPetType($petType);
+                $pet->setName($arrayValues["name"]);
+                $pet->setBreed($arrayValues["breed"]);
+                $pet->setSize($arrayValues["size"]);
+                $pet->setDescription($arrayValues["description"]);
+                $pet->setPhoto($arrayValues["photo"]);
+                $pet->setVaccines($arrayValues["vaccines"]);
+                $pet->setVideo($arrayValues["video"]);
+                $pet->setIsActive($arrayValues["isActive"]);
+                
+                array_push($petList, $pet);
+            }
+            return $petList;
+        } catch(Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function GetByUserIdBD($userId) 
+    {
+        try
+        {
+            $petList = array();
+
+            // $query = "SELECT * FROM 'pet' WHERE (userId = 3)";
+
+            // $query = "SELECT * FROM ".$this->tableName;
+
+            // $query = "SELECT * FROM 'pet'";
+
+            
+
+
+            // $parameters['userId'] = $userId;
+
+            $query = "SELECT * FROM ".$this->tableName;
+
+            $this->connection = Connection::GetInstance();
+
+            $resultSet = $this->connection->Execute($query);
+            
+            foreach ($resultSet as $arrayValues)
+            {      
+                $petType = new PetType();
+                $petType->setId($arrayValues["petType"]);
+
+                $pet = new Pet();
+                $pet->setId($arrayValues["id"]);
+                $pet->setUserId($arrayValues["userId"]);
+                $pet->setPetType($petType);
+                $pet->setName($arrayValues["name"]);
+                $pet->setBreed($arrayValues["breed"]);
+                $pet->setSize($arrayValues["size"]);
+                $pet->setDescription($arrayValues["description"]);
+                $pet->setPhoto($arrayValues["photo"]);
+                $pet->setVaccines($arrayValues["vaccines"]);
+                $pet->setVideo($arrayValues["video"]);
+                $pet->setIsActive($arrayValues["isActive"]);
+                
+                array_push($petList, $pet);
+            }
+
+            return (count($petList) > 0) ? $petList[0] : null;
+        }
+        catch(\PDOException $ex)
+        {
+            throw $ex;
+        }
+    }    
 
     public function getNextId()
     {
@@ -179,6 +264,45 @@ class PetDAO implements IPetDAO {
         array_push($this->petList, $pet);
 
         $this->saveData();
+    }
+
+    public function Update($petId) {
+        try {
+
+            $query = "UPDATE this->tableName SET userId = :userId, petType = :petType, name = :name,  breed = :breed, size = :size, description = :description, photo = :photo, vaccines = :vaccines, video = :video, isActive = :isActive WHERE id = {$petId};";
+            
+            $parameters["userId"] = $pet->getUserId();
+            $parameters["petType"] = $pet->getPetType()->getId();
+            $parameters["name"] = $pet->getName();
+            $parameters["breed"] = $pet->getBreed();
+            $parameters["size"] = $pet->getSize();
+            $parameters["description"] = $pet->getDescription();
+            $parameters["photo"] = $pet->getPhoto();
+            $parameters["vaccines"] = $pet->getVaccines();
+            $parameters["video"] = $pet->getVideo();
+            $parameters["isActive"] = $pet->getIsActive();
+
+            $this->connection = Connection::GetInstance();
+            $this->connection->ExecuteNonQuery($query, $parameters);
+
+        } catch(Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function Inactivate($petId) {
+        try {
+
+            $query = "UPDATE ".$this->tableName." SET isActive = false WHERE id={$petId};";
+
+            $parameters["petId"] = $petId;
+
+            $this->connection = Connection::GetInstance();
+            $this->connection->ExecuteNonQuery($query, $parameters);
+
+        } catch(Exception $ex) {
+            throw $ex;
+        }
     }
 
 }

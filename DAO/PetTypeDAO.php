@@ -82,12 +82,58 @@
             return (count($petTypes) > 0) ? $petTypes[0] : null;
         }
 
+        public function GetByIdBD($id) 
+        {
+        try
+        {
+
+            $query = "SELECT * FROM ".$this->tableName. "WHERE (id = {$id})";
+            
+            $parameters['id'] = $id;
+
+            $this->connection = Connection::GetInstance();
+
+            $resultSet = $this->connection->Execute($query, $parameters);
+            
+            $petType = new PetType();
+            $petType->setId($resultSet[0]["id"]);
+            $petType->setName($resultSet[0]["name"]);
+
+            return $petType;
+        }
+        catch(\PDOException $ex)
+        {
+            throw $ex;
+        }
+        }
+
+        public function GetAllBD() {
+            try {
+                $petTypeList = array();
+                $query = "SELECT * FROM " . $this->tableName;
+                $this->connection = Connection::getInstance();
+                $resultSet = $this->connection->Execute($query);
+    
+                foreach ($resultSet as $arrayValues)
+                {      
+                    $petType = new PetType();
+                    $petType->setId($arrayValues["petType"]);
+                    $petType->setName($arrayValues["name"]);
+                    
+                    array_push($petTypeList, $petType);
+                }
+                return $petTypeList;
+            } catch(Exception $ex) {
+                throw $ex;
+            }
+        }  
+
         public function AddBD(PetType $pettype){
             $response=null;
             try{
                 $query = "INSERT INTO " .$this->tablename."(name) VALUES ( :name);";
     
-                $parameters["name"] = $pet->getName();
+                $parameters["name"] = $pettype->getName();
     
                 $this->connection= Connection::GetInstance();
     

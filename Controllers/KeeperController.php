@@ -37,7 +37,7 @@ class KeeperController
 				$this->showAddView("Start Date previous current date"); }
 			else
 			{			
-                $response=$this->keeperDAO->add($Keeper);
+                $response=$this->keeperDAO->AddBD($Keeper);
                 $this->showHomeView($response);
 			}
 		}

@@ -39,7 +39,7 @@
             $Reservation->settotalPrice($totalPrice);
             $Reservation->setStatus('created');
 
-            $this->ReservationDAO->add($Reservation);
+            $this->ReservationDAO->AddBD($Reservation);
             $this->showListView();
         }
 

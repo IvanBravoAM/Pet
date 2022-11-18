@@ -27,7 +27,7 @@ include_once(VIEWS_PATH . "nav-bar-owner.php");
                          ?>
                          <?php
                          if (!empty($petList)) {
-                            foreach ($petList as $pet) {
+                            foreach ($petList as $pet) {if($pet->getIsActive() == 'true'){
                          ?>
                             <form action="<?php echo FRONT_ROOT . "Pet/Inactivate" ?>" method="post">
                                 <tr>
@@ -59,7 +59,7 @@ include_once(VIEWS_PATH . "nav-bar-owner.php");
                                 </tr>
                             </form>
                          <?php
-                              }
+                              }}
                          } else {
                               echo "<div class='container alert alert-warning'>
                          <div class='content text-center'>

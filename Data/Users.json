@@ -53,5 +53,16 @@
         "phone": "122222505",
         "email": "jk@gmail.com",
         "userType": "Keeper"
+    },
+    {
+        "id": 6,
+        "username": "kp",
+        "password": "1234",
+        "name": "key",
+        "lastname": "per",
+        "dni": "15111",
+        "phone": "22223505",
+        "email": "kep@gmail.com",
+        "userType": "Keeper"
     }
 ]

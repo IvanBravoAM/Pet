@@ -8,6 +8,8 @@
     {
         private $userList = array();
         private $filename = ROOT."Data/Users.json";
+        private $tablename ='user';
+        private $connection;
 
         public function add(User $user)
         {
@@ -15,6 +17,32 @@
             $user->setId($this->getNextId());
             array_push($this->userList, $user);
             $this->saveData();
+        }
+
+        public function AddBD(User $user){
+            $response=null;
+            try{
+                $query = "INSERT INTO " .$this->tablename."(username, password, name, lastname, dni, phone, email, userType) VALUES ( :username, :password, :name, :lastname, :dni, :phone, :email, :userType);";
+    
+                $parameters["username"] = $user->getUsername();
+                $parameters["password"] = $user->getPassword();
+                $parameters["name"] = $user->getName();
+                $parameters["lastname"] = $user->getLastname();
+                $parameters["dni"] = $user->getDni();
+                $parameters["phone"] = $user->getPhone();
+                $parameters["email"] = $user->getEmail();
+                $parameters["userType"] = $user->getUserType();
+    
+                $this->connection= Connection::GetInstance();
+    
+                $responseConnection = $this->connection->ExecuteNonQuery($query, $parameters);
+                return "Se ha agregado ".$responseConnection." con exito.";
+    
+            }
+            catch(Exception $ex){
+                throw $ex;
+                return "Error al insertar ".$this->responseConnection->getMessage();
+            }
         }
 
         public function getNextId()
@@ -75,6 +103,69 @@
             }
         } 
 
+        public function GetAllBD(){
+            try
+            {
+                $userList = array();
+
+                $query = "SELECT * FROM ".$this->tableName;
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet = $this->connection->Execute($query);
+                
+                foreach ($resultSet as $row){
+
+                    $user = new User();
+                    $user->setId($arrayValues["id"]);
+                    $user->setUsername($arrayValues["username"]);
+                    $user->setPassword($arrayValues["password"]);
+                    $user->setName($arrayValues["name"]);
+                    $user->setLastname($arrayValues["lastname"]);
+                    $user->setDni($arrayValues["dni"]);
+                    $user->setPhone($arrayValues["phone"]);
+                    $user->setEmail($arrayValues["email"]);
+                    $user->setUserType($arrayValues["userType"]);
+                    array_push($this->userList, $user);
+                }
+
+                return $userList;
+            }
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
+        public function GetByUsernameBD($username){
+            try
+            {
+
+                $query = "SELECT * FROM ".$this->tableName." WHERE username = '$username'";
+
+                $this->connection = Connection::GetInstance();
+
+                $resultSet = $this->connection->Execute($query);
+               
+                $user = new User();
+                $user->setId($resultSet[0]["id"]);
+                $user->setUsername($resultSet[0]["username"]);
+                $user->setPassword($resultSet[0]["password"]);
+                $user->setName($resultSet[0]["name"]);
+                $user->setLastname($resultSet[0]["lastname"]);
+                $user->setDni($resultSet[0]["dni"]);
+                $user->setPhone($resultSet[0]["phone"]);
+                $user->setEmail($resultSet[0]["email"]);
+                $user->setUserType($resultSet[0]["userType"]);
+
+                return $user;
+            }
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
         public function delete($id)
         {
             $this->retrieveData();
@@ -127,6 +218,8 @@
             array_push($this->userList, $user);
             $this->saveData();
         }
+
+
 
     }
 

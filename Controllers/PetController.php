@@ -17,6 +17,18 @@
     
         public function ShowPetListView(){
             require_once(VIEWS_PATH."validate-session.php");
+            // $petList = $this->petDAO->GetByUserIdBD($_SESSION['loggedUser']->getId());
+            $petList = $this->petDAO->GetByUserId($_SESSION['loggedUser']->getId());
+            // $petList = $this->petDAO->GetAllBD();
+            require_once(VIEWS_PATH . "pet-list.php");
+    
+        }
+
+        public function Inactivate($petId){
+            require_once(VIEWS_PATH."validate-session.php");
+            
+            $this->petDAO->Inactivate($petId);
+            // $petList = $this->petDAO->GetByUserIdBD($_SESSION['loggedUser']->getId());
             $petList = $this->petDAO->GetByUserId($_SESSION['loggedUser']->getId());
             require_once(VIEWS_PATH . "pet-list.php");
     
@@ -24,6 +36,7 @@
     
         public function ShowAddView($message= ''){
             $petTypeController = new PetTypeController();
+            // $petTypeList = $petTypeController->petTypeDAO->GetAllBD();
             $petTypeList = $petTypeController->petTypeDAO->GetAll();
             require_once(VIEWS_PATH."validate-session.php");
             require_once(VIEWS_PATH . "add-pet.php");
@@ -55,8 +68,8 @@
             $pet->setUserID($_SESSION['loggedUser']->getId());
             $pet->setIsActive(true);
     
-            $this->petDAO->AddBD($pet);
-            $this->ShowAddView();
+            $message=$this->petDAO->AddBD($pet);
+            $this->ShowAddView($message);
         }
     
 

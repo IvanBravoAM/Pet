@@ -8,6 +8,8 @@
     {
         private $ReservationList = array();
         private $filename = ROOT."Data/Reservations.json";
+        private $tablename ='reservation';
+        private $connection;
 
         public function Add(Reservation $Reservation)
         {
@@ -15,6 +17,121 @@
             $Reservation->setId($this->getNextId());
             array_push($this->ReservationList, $Reservation);
             $this->saveData();
+        }
+
+        public function AddBD(Reservation $Reservation){
+            $response=null;
+            try{
+                $query = "INSERT INTO " .$this->tablename."(idOwner, idKeeper, idPet, initialDate, endDate, days, totalPrice, status) VALUES ( :idOwner, :idKeeper, :idPet, :initialDate, :endDate, :days, :totalPrice, :status);";
+    
+                $parameters["idOwner"]=$Reservation->getIdOwner();
+                $parameters["idKeeper"]=$Reservation->getIdKeeper(); 
+                $parameters["idPet"]=$Reservation->getIdPet(); 
+                $parameters["initialDate"]=$Reservation->getInitialDate();
+                $parameters["endDate"]=$Reservation->getendDate(); 
+                $parameters["days"]=$Reservation->getDays(); 
+                $parameters["totalPrice"]=$Reservation->gettotalPrice();
+                $parameters["status"]=$Reservation->getStatus();
+    
+                $this->connection= Connection::GetInstance();
+    
+                $responseConnection = $this->connection->ExecuteNonQuery($query, $parameters);
+                return "Se han modificado".$responseConnection."filas";
+    
+            }
+            catch(Exception $ex){
+                throw $ex;
+                return "Error al insertar ".$this->responseConnection->getMessage();
+            }
+        }
+
+        private function GetAllBD()
+		{
+			$keepersList = array();
+            $query = "SELECT * FROM " . $this->tableName;
+            $this->connection = Connection::getInstance();
+            $resultSet = $this->connection->Execute($query);
+		
+			foreach($resultSet as $valuesArray)
+            {
+                $Reservation = new Reservation();
+                $Reservation->setId($valuesArray["id"]);
+                $Reservation->setIdOwner($valuesArray["idOwner"]);;
+                $Reservation->setIdKeeper($valuesArray["idKeeper"]); 
+                $Reservation->setIdPet($valuesArray["idPet"]); 
+                $Reservation->setInitialDate($valuesArray["initialDate"]);
+                $Reservation->setendDate($valuesArray["endDate"]);
+                $Reservation->setDays($valuesArray["days"]);
+                $Reservation->settotalPrice($valuesArray["totalPrice"]);
+                $Reservation->setStatus($valuesArray["status"]);
+
+                array_push($this->ReservationList, $Reservation);
+            }
+			
+		}
+
+        public function GetByIdBD($id) 
+        {
+        try
+        {
+
+            $query = "SELECT * FROM ".$this->tableName. "WHERE (id = {$id})";
+            
+            $parameters['id'] = $id;
+
+            $this->connection = Connection::GetInstance();
+
+            $resultSet = $this->connection->Execute($query, $parameters);
+            
+            $Reservation = new Reservation();
+            $Reservation->setId($resultSet[0]["id"]);
+            $Reservation->setIdOwner($resultSet[0]["idOwner"]);;
+            $Reservation->setIdKeeper($resultSet[0]["idKeeper"]); 
+            $Reservation->setIdPet($resultSet[0]["idPet"]); 
+            $Reservation->setInitialDate($resultSet[0]["initialDate"]);
+            $Reservation->setendDate($resultSet[0]["endDate"]);
+            $Reservation->setDays($resultSet[0]["days"]);
+            $Reservation->settotalPrice($resultSet[0]["totalPrice"]);
+            $Reservation->setStatus($resultSet[0]["status"]);
+
+            return $Reservation;
+        }
+        catch(\PDOException $ex)
+        {
+            throw $ex;
+        }
+        }
+
+        public function GetByIdKeeperBD($idKeeper) 
+        {
+        try
+        {
+
+            $query = "SELECT * FROM ".$this->tableName. "WHERE (idKeeper = {$idKeeper})";
+            
+            $parameters['idKeeper'] = $idKeeper;
+
+            $this->connection = Connection::GetInstance();
+
+            $resultSet = $this->connection->Execute($query, $parameters);
+            
+            $Reservation = new Reservation();
+            $Reservation->setId($resultSet[0]["id"]);
+            $Reservation->setIdOwner($resultSet[0]["idOwner"]);;
+            $Reservation->setIdKeeper($resultSet[0]["idKeeper"]); 
+            $Reservation->setIdPet($resultSet[0]["idPet"]); 
+            $Reservation->setInitialDate($resultSet[0]["initialDate"]);
+            $Reservation->setendDate($resultSet[0]["endDate"]);
+            $Reservation->setDays($resultSet[0]["days"]);
+            $Reservation->settotalPrice($resultSet[0]["totalPrice"]);
+            $Reservation->setStatus($resultSet[0]["status"]);
+
+            return $Reservation;
+        }
+        catch(\PDOException $ex)
+        {
+            throw $ex;
+        }
         }
 
         private function saveData()

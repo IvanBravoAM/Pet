@@ -39,7 +39,7 @@
 				$this->ShowAddView("This DNI is already registered"); }
 			else
 			{
-				$response=$this->UserDAO->add($user);
+				$response=$this->UserDAO->AddBD($user);
 				$_SESSION["loggedUser"] = $user;
 				$this->ShowAddView($response);
 			}
