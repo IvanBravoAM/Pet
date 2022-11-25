@@ -87,7 +87,7 @@
         try
         {
 
-            $query = "SELECT * FROM ".$this->tableName. "WHERE (id = {$id})";
+            $query = "SELECT * FROM ".$this->tablename. "WHERE (id = {$id})";
             
             $parameters['id'] = $id;
 
@@ -110,14 +110,14 @@
         public function GetAllBD() {
             try {
                 $petTypeList = array();
-                $query = "SELECT * FROM " . $this->tableName;
+                $query = "SELECT * FROM " . $this->tablename;
                 $this->connection = Connection::getInstance();
                 $resultSet = $this->connection->Execute($query);
     
                 foreach ($resultSet as $arrayValues)
                 {      
                     $petType = new PetType();
-                    $petType->setId($arrayValues["petType"]);
+                    $petType->setId($arrayValues["id"]);
                     $petType->setName($arrayValues["name"]);
                     
                     array_push($petTypeList, $petType);

@@ -8,6 +8,7 @@ class Keeper
 
     private $userId;
     private $petSize;
+    private $petType;
     private $initialDate;
     private $endDate;
     private $days=array();
@@ -112,6 +113,26 @@ class Keeper
         return $this;
     }
     
+
+    /**
+     * Get the value of petType
+     */ 
+    public function getPetType()
+    {
+        return $this->petType;
+    }
+
+    /**
+     * Set the value of petType
+     *
+     * @return  self
+     */ 
+    public function setPetType($petType)
+    {
+        $this->petType = $petType;
+
+        return $this;
+    }
 }
 
 ?>

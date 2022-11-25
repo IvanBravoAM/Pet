@@ -9,7 +9,7 @@ use Models\PetType;
 class PetDAO implements IPetDAO {
     private $petList = array();
     private $filename = ROOT."Data/Pets.json";
-    private $tablename ='pet';
+    private $tablename ="pet";
     private $connection;
 
     public function add(Pet $pet)
@@ -28,7 +28,7 @@ class PetDAO implements IPetDAO {
 
             // $parameters["id"] = $pet->getId();
             $parameters["userId"] = $pet->getUserId();
-            $parameters["petType"] = $pet->getPetType()->getId();
+            $parameters["petType"] = $pet->getPetType();
             $parameters["name"] = $pet->getName();
             $parameters["breed"] = $pet->getBreed();
             $parameters["size"] = $pet->getSize();
@@ -53,7 +53,10 @@ class PetDAO implements IPetDAO {
     public function GetAllBD() {
         try {
             $petList = array();
-            $query = "SELECT * FROM " . $this->tableName;
+            $query = "SELECT * FROM $this->tableName" ;
+            // $query = "SELECT * FROM 'pet'" ;
+            echo $query ;
+            //echo $this->tablename;
             $this->connection = Connection::getInstance();
             $resultSet = $this->connection->Execute($query);
 
@@ -93,14 +96,56 @@ class PetDAO implements IPetDAO {
 
             // $query = "SELECT * FROM ".$this->tableName;
 
-            // $query = "SELECT * FROM 'pet'";
+            $query = "SELECT * FROM $this->tablename WHERE (userId = $userId)";
 
             
 
 
-            // $parameters['userId'] = $userId;
+             $parameters['userId'] = $userId;
 
-            $query = "SELECT * FROM ".$this->tableName;
+            // $query = "SELECT * FROM ".$this->tableName;
+
+            $this->connection = Connection::GetInstance();
+
+            $resultSet = $this->connection->Execute($query);
+            
+            foreach ($resultSet as $arrayValues)
+            {      
+                $petType = new PetType();
+                $petType->setId($arrayValues["petType"]);
+
+                $pet = new Pet();
+                $pet->setId($arrayValues["id"]);
+                $pet->setUserId($arrayValues["userId"]);
+                $pet->setPetType($petType);
+                $pet->setName($arrayValues["name"]);
+                $pet->setBreed($arrayValues["breed"]);
+                $pet->setSize($arrayValues["size"]);
+                $pet->setDescription($arrayValues["description"]);
+                $pet->setPhoto($arrayValues["photo"]);
+                $pet->setVaccines($arrayValues["vaccines"]);
+                $pet->setVideo($arrayValues["video"]);
+                $pet->setIsActive($arrayValues["isActive"]);
+                
+                array_push($petList, $pet);
+            }
+
+            return (count($petList) > 0) ? $petList : null;
+        }
+        catch(\PDOException $ex)
+        {
+            throw $ex;
+        }
+    }    
+
+    public function GetByIdBD($id) 
+    {
+        try
+        {
+            $petList = array();
+            $query = "SELECT * FROM $this->tablename WHERE (id = $id)";
+            $parameters['id'] = $id;
+
 
             $this->connection = Connection::GetInstance();
 
@@ -266,10 +311,12 @@ class PetDAO implements IPetDAO {
         $this->saveData();
     }
 
-    public function Update($petId) {
+    public function Update($pet) {
         try {
 
-            $query = "UPDATE this->tableName SET userId = :userId, petType = :petType, name = :name,  breed = :breed, size = :size, description = :description, photo = :photo, vaccines = :vaccines, video = :video, isActive = :isActive WHERE id = {$petId};";
+            $query = "UPDATE " .$this->tablename." SET userId = :userId, petType = :petType, name = :name,  breed = :breed, size = :size, description = :description, photo = :photo, vaccines = :vaccines, video = :video, isActive = :isActive WHERE id = {$pet->getId()};";
+
+            // $query = "INSERT INTO " .$this->tablename."(userId, petType, name, breed, size, description, photo, vaccines, video, isActive) VALUES ( :userId, :petType, :name, :breed, :size, :description, :photo, :vaccines, :video, :isActive);";
             
             $parameters["userId"] = $pet->getUserId();
             $parameters["petType"] = $pet->getPetType()->getId();
@@ -293,15 +340,21 @@ class PetDAO implements IPetDAO {
     public function Inactivate($petId) {
         try {
 
-            $query = "UPDATE ".$this->tableName." SET isActive = false WHERE id={$petId};";
+            $query = "UPDATE {$this->tablename} SET isActive = false WHERE id={$petId};";
 
             $parameters["petId"] = $petId;
+            
 
             $this->connection = Connection::GetInstance();
             $this->connection->ExecuteNonQuery($query, $parameters);
 
-        } catch(Exception $ex) {
+            $responseConnection = $this->connection->ExecuteNonQuery($query, $parameters);
+            return "Se han modificado".$responseConnection." filas correctamente";
+
+        }
+        catch(Exception $ex){
             throw $ex;
+            return "Error al insertar ".$this->responseConnection->getMessage();
         }
     }
 

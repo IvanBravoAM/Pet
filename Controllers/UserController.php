@@ -53,7 +53,7 @@
 
 		private function checkUser($newUser) 
 		{
-            $userList = $this->UserDAO->getAll();
+            $userList = $this->UserDAO->GetAllBD();
             foreach ($userList as $user) 
             {
                 if ($newUser->getUsername() == $user->getUsername()) return 1;

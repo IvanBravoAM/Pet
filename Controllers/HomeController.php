@@ -28,13 +28,10 @@
 
         }
 
-        public function Test() {
-            echo 'funciona el test';
-        }
 
         public function Login($userName, $password) {
             $userController=new UserController();
-            $user= $userController->UserDAO->GetByUsername($userName);
+            $user= $userController->UserDAO->GetByUsernameBD($userName);
             
             if(($user != null) && ($user->getPassword() === $password))
             {

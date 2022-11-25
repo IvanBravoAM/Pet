@@ -29,6 +29,7 @@
                 $parameters["idPet"]=$Reservation->getIdPet(); 
                 $parameters["initialDate"]=$Reservation->getInitialDate();
                 $parameters["endDate"]=$Reservation->getendDate(); 
+                // $daysArray = explode(",",$Reservation["days"]);
                 $parameters["days"]=$Reservation->getDays(); 
                 $parameters["totalPrice"]=$Reservation->gettotalPrice();
                 $parameters["status"]=$Reservation->getStatus();
@@ -45,9 +46,9 @@
             }
         }
 
-        private function GetAllBD()
+        public function GetAllBD()
 		{
-			$keepersList = array();
+			$ReservationList = array();
             $query = "SELECT * FROM " . $this->tableName;
             $this->connection = Connection::getInstance();
             $resultSet = $this->connection->Execute($query);
@@ -61,11 +62,12 @@
                 $Reservation->setIdPet($valuesArray["idPet"]); 
                 $Reservation->setInitialDate($valuesArray["initialDate"]);
                 $Reservation->setendDate($valuesArray["endDate"]);
-                $Reservation->setDays($valuesArray["days"]);
+                $daysArray = explode(",",$valuesArray["days"]);
+                $Reservation->setDays($daysArray);
                 $Reservation->settotalPrice($valuesArray["totalPrice"]);
                 $Reservation->setStatus($valuesArray["status"]);
 
-                array_push($this->ReservationList, $Reservation);
+                array_push($ReservationList, $Reservation);
             }
 			
 		}
@@ -75,7 +77,7 @@
         try
         {
 
-            $query = "SELECT * FROM ".$this->tableName. "WHERE (id = {$id})";
+            $query = "SELECT * FROM $this->tablename WHERE (id = $id)";
             
             $parameters['id'] = $id;
 
@@ -90,7 +92,8 @@
             $Reservation->setIdPet($resultSet[0]["idPet"]); 
             $Reservation->setInitialDate($resultSet[0]["initialDate"]);
             $Reservation->setendDate($resultSet[0]["endDate"]);
-            $Reservation->setDays($resultSet[0]["days"]);
+            $daysArray = explode(",",$resultSet[0]["days"]);
+            $Reservation->setDays($daysArray);
             $Reservation->settotalPrice($resultSet[0]["totalPrice"]);
             $Reservation->setStatus($resultSet[0]["status"]);
 
@@ -106,8 +109,8 @@
         {
         try
         {
-
-            $query = "SELECT * FROM ".$this->tableName. "WHERE (idKeeper = {$idKeeper})";
+            $ReservationList = array ();
+            $query = "SELECT * FROM $this->tablename WHERE (idKeeper = $idKeeper)";
             
             $parameters['idKeeper'] = $idKeeper;
 
@@ -115,18 +118,60 @@
 
             $resultSet = $this->connection->Execute($query, $parameters);
             
-            $Reservation = new Reservation();
-            $Reservation->setId($resultSet[0]["id"]);
-            $Reservation->setIdOwner($resultSet[0]["idOwner"]);;
-            $Reservation->setIdKeeper($resultSet[0]["idKeeper"]); 
-            $Reservation->setIdPet($resultSet[0]["idPet"]); 
-            $Reservation->setInitialDate($resultSet[0]["initialDate"]);
-            $Reservation->setendDate($resultSet[0]["endDate"]);
-            $Reservation->setDays($resultSet[0]["days"]);
-            $Reservation->settotalPrice($resultSet[0]["totalPrice"]);
-            $Reservation->setStatus($resultSet[0]["status"]);
+            foreach($resultSet as $valuesArray)
+            {
+                $Reservation = new Reservation();
+                $Reservation->setId($valuesArray["id"]);
+                $Reservation->setIdOwner($valuesArray["idOwner"]);;
+                $Reservation->setIdKeeper($valuesArray["idKeeper"]); 
+                $Reservation->setIdPet($valuesArray["idPet"]); 
+                $Reservation->setInitialDate($valuesArray["initialDate"]);
+                $Reservation->setendDate($valuesArray["endDate"]);
+                $Reservation->setDays($valuesArray["days"]);
+                $Reservation->settotalPrice($valuesArray["totalPrice"]);
+                $Reservation->setStatus($valuesArray["status"]);
 
-            return $Reservation;
+                array_push($ReservationList, $Reservation);
+            }
+
+            return (count($ReservationList) > 0) ? $ReservationList : null;
+
+        }
+        catch(\PDOException $ex)
+        {
+            throw $ex;
+        }
+        }
+
+        public function GetByIdOwnerBD($idOwner) 
+        {
+        try
+        {
+            $ReservationList = array ();
+            $query = "SELECT * FROM $this->tablename WHERE (idOwner = $idOwner)";
+            
+            $parameters['idOwner'] = $idOwner;
+
+            $this->connection = Connection::GetInstance();
+
+            $resultSet = $this->connection->Execute($query, $parameters);
+            
+            foreach($resultSet as $valuesArray)
+            {
+                $Reservation = new Reservation();
+                $Reservation->setId($valuesArray["id"]);
+                $Reservation->setIdOwner($valuesArray["idOwner"]);;
+                $Reservation->setIdKeeper($valuesArray["idKeeper"]); 
+                $Reservation->setIdPet($valuesArray["idPet"]); 
+                $Reservation->setInitialDate($valuesArray["initialDate"]);
+                $Reservation->setendDate($valuesArray["endDate"]);
+                $Reservation->setDays($valuesArray["days"]);
+                $Reservation->settotalPrice($valuesArray["totalPrice"]);
+                $Reservation->setStatus($valuesArray["status"]);
+
+                array_push($ReservationList, $Reservation);
+            }
+            return (count($ReservationList) > 0) ? $ReservationList : null;
         }
         catch(\PDOException $ex)
         {
@@ -251,6 +296,46 @@
             array_push($this->ReservationList, $Reservation);
 
             $this->SaveData();
+        }
+
+        public function Confirm($ReservationId) {
+            try {
+    
+                $query = "UPDATE $this->tablename SET status = 'confirmed' WHERE (id=$ReservationId);";
+    
+                $parameters["ReservationId"] = $ReservationId;
+    
+                $this->connection = Connection::GetInstance();
+                $this->connection->ExecuteNonQuery($query, $parameters);
+    
+                $responseConnection = $this->connection->ExecuteNonQuery($query, $parameters);
+                return "Se han modificado".$responseConnection." filas correctamente";
+    
+            }
+            catch(Exception $ex){
+                throw $ex;
+                return "Error al insertar ".$this->responseConnection->getMessage();
+            }
+        }
+
+        public function Inactivate($ReservationId) {
+            try {
+    
+                $query = "UPDATE $this->tablename SET status = 'inactive' WHERE (id=$ReservationId);";
+    
+                $parameters["ReservationId"] = $ReservationId;
+    
+                $this->connection = Connection::GetInstance();
+                $this->connection->ExecuteNonQuery($query, $parameters);
+    
+                $responseConnection = $this->connection->ExecuteNonQuery($query, $parameters);
+                return "Se han modificado".$responseConnection." filas correctamente";
+    
+            }
+            catch(Exception $ex){
+                throw $ex;
+                return "Error al insertar ".$this->responseConnection->getMessage();
+            }
         }
 
 

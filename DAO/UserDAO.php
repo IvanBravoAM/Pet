@@ -108,7 +108,7 @@
             {
                 $userList = array();
 
-                $query = "SELECT * FROM ".$this->tableName;
+                $query = "SELECT * FROM ".$this->tablename;
 
                 $this->connection = Connection::GetInstance();
 
@@ -117,15 +117,15 @@
                 foreach ($resultSet as $row){
 
                     $user = new User();
-                    $user->setId($arrayValues["id"]);
-                    $user->setUsername($arrayValues["username"]);
-                    $user->setPassword($arrayValues["password"]);
-                    $user->setName($arrayValues["name"]);
-                    $user->setLastname($arrayValues["lastname"]);
-                    $user->setDni($arrayValues["dni"]);
-                    $user->setPhone($arrayValues["phone"]);
-                    $user->setEmail($arrayValues["email"]);
-                    $user->setUserType($arrayValues["userType"]);
+                    $user->setId($row["id"]);
+                    $user->setUsername($row["username"]);
+                    $user->setPassword($row["password"]);
+                    $user->setName($row["name"]);
+                    $user->setLastname($row["lastname"]);
+                    $user->setDni($row["dni"]);
+                    $user->setPhone($row["phone"]);
+                    $user->setEmail($row["email"]);
+                    $user->setUserType($row["userType"]);
                     array_push($this->userList, $user);
                 }
 
@@ -141,7 +141,14 @@
             try
             {
 
-                $query = "SELECT * FROM ".$this->tableName." WHERE username = '$username'";
+                $query = "SELECT * FROM ".$this->tablename." WHERE username = '$username'";
+
+                // $query = "SELECT * FROM $this->tablename WHERE (username = $username)";
+
+            
+
+
+                $parameters['username'] = $username;
 
                 $this->connection = Connection::GetInstance();
 

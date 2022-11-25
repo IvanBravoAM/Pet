@@ -20,6 +20,14 @@
         </select>
     </div>
     <div class="form-outline mb-2">
+        <label class="form-label">Type</label>
+        <select class="form-control" name="petTypeId" id="petType" required>
+            <?php foreach($petTypeList as $petType) { ?>
+                <option  value="<?php echo $petType->getId() ?>"><?php echo $petType->getName() ?></option>
+            <?php } ?>
+        </select>
+    </div>
+    <div class="form-outline mb-2">
         <label class="form-label" >InitialDate</label>
         <input type="date" id="InitialDate" class="form-control" name="InitialDate" placeholder="InitialDate" required>
     </div>
@@ -29,7 +37,8 @@
     </div>
     <div class="form-outline mb-2">
         <label class="form-label" >Days</label>
-        <select class="form-control" multiple="multiple" name="days[]" required="1" >
+        <p>Use Shift or Control to multi select</p>
+        <select class="form-control" multiple name="days[]" required="1" >
                 <option value="monday">Monday</option>
                 <option value="tuesday">Tuesday</option>
                 <option value="wednesday">Wednesday</option>

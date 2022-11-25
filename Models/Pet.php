@@ -133,7 +133,7 @@
             return $this->petType;
         }
 
-        public function setPetType(PetType $petType)
+        public function setPetType($petType)
         {
             $this->petType = $petType;
 

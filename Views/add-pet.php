@@ -29,6 +29,18 @@
         <input type="text" id="Desciption" class="form-control" name="Desciption" placeholder="Desciption" required>
     </div>
     <div class="form-outline mb-2">
+        <label class="form-label" >Photo</label>
+        <input type="text" id="Photo" class="form-control" name="Photo" placeholder="Insert the Photo link here" >
+    </div>
+    <div class="form-outline mb-2">
+        <label class="form-label" >Vaccines</label>
+        <input type="text" id="Vaccines" class="form-control" name="Vaccines" placeholder="Insert the Vaccines link here" >
+    </div>
+    <div class="form-outline mb-2">
+        <label class="form-label" >Video</label>
+        <input type="text" id="Video" class="form-control" name="Video" placeholder="Insert the Video link here" >
+    </div>
+    <div class="form-outline mb-2">
         <label class="form-label">Type</label>
         <select class="form-control" name="petTypeId" id="petType" required>
             <?php foreach($petTypeList as $petType) { ?>

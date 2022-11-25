@@ -17,15 +17,17 @@ class KeeperController
 			$this->keeperDAO= new KeeperDAO();
 		}
 
-		public function add($petSize, $initDate, $endDate, $days, $price)
+		public function add($petSize,$petType, $initDate, $endDate, $days, $price)
 		{
 			require_once(VIEWS_PATH . "validate-session.php");
 			$Keeper = new Keeper();
 			$Keeper->setUserId($_SESSION['loggedUser']->getId());
 			$Keeper->setPetSize($petSize);
+			$Keeper->setPetType($petType);
 			$Keeper->setInitialDate($initDate);
 			$Keeper->setEndDate($endDate);
-			$Keeper->setDays($days);
+			$daysString = implode(",", $days);
+			$Keeper->setDays($daysString);
 			$Keeper->setPrice($price);
             $Keeper->setIsActive(true);
 
@@ -46,7 +48,8 @@ class KeeperController
 		public function showAddView($message='')
 		{
 			require_once(VIEWS_PATH . "validate-session.php");
-    
+			$petTypeController = new PetTypeController();
+            $petTypeList = $petTypeController->petTypeDAO->GetAllBD();
             $userId= $_SESSION['loggedUser']->getId();
             $check = $this->checkKeeper($userId);
             if($check != 0){
@@ -58,6 +61,12 @@ class KeeperController
 
 		public function checkDates($initDate, $endDate)
 		{	
+			if($endDate < $nitDate){
+				return 1;
+			}
+			if($initDate < date("Y/m/d")){
+				return 2;
+			}
 			return 0;
 
 		}
@@ -71,14 +80,13 @@ class KeeperController
 		{
 			require_once(VIEWS_PATH . "validate-session.php");
 			$message=''; $message1='';$initDate=''; $endDate='';
-			$keeperList=$this->keeperDAO->getAll();
+			$keeperList=$this->keeperDAO->GetAllBD();
 			require_once(VIEWS_PATH . "keeper-list.php");
 		}
 
         private function checkKeeper($userId) 
 		{
-            $KeeperList = $this->keeperDAO->getAll();
-
+            $KeeperList = $this->keeperDAO->GetAllBD();
             foreach ($KeeperList as $Keeper) 
             {
                 if ($Keeper->getUserId() == $userId) return 1;
@@ -87,15 +95,24 @@ class KeeperController
             return 0;
         }
 
-        public function showProfile($message=''){
+        public function showProfile($keeperId='',$message=''){
             require_once(VIEWS_PATH . "validate-session.php");
-        	$user = $_SESSION["loggedUser"];
-            $keeper = $this->keeperDAO->getById($user->getId());
-			if(isset($keeper)){
-				require_once(VIEWS_PATH . "keeper-profile.php");
+
+			if($_SESSION['loggedUser']->getUserType() == "Owner"){
+				$keeper = $this->keeperDAO->getByKeeperIdBD($keeperId);
+				if(isset($keeper)){
+					require_once(VIEWS_PATH . "keeper-profile.php");
+				}
 			}else{
-				$message='You are not registered as a Keeper';
+				$user = $_SESSION["loggedUser"];
+				$keeper = $this->keeperDAO->getByUserIdBD($user->getId());
+				if(isset($keeper)){
+					require_once(VIEWS_PATH . "keeper-profile.php");
+				}else{
+					$message='You are not registered as a Keeper';
+				}
 			}
+        	
 
         	
         }
@@ -110,12 +127,12 @@ class KeeperController
 			else if ($check == 2) { $message1="Start Date previous current date"; $this->showListView();}
 			else
 			{			
-				$keeperList=$this->keeperDAO->getAll();
+				$keeperList=$this->keeperDAO->GetAllBD();
 				$keeperListFiltered = array();
 
 				foreach ($keeperList as $keeper)
 				{
-					if($keeper->getInitialDate() <= $initialDate && $endDate <= $keeper->getEndDate())
+					if($keeper->getInitialDate() >= $initialDate && $endDate >= $keeper->getEndDate())
 					{
 						array_push($keeperListFiltered, $keeper);
 					}

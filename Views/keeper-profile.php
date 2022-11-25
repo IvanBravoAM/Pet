@@ -5,29 +5,56 @@
 ?>
 
 <div class="container p-3 my-3 bg-dark text-white">
-<form action="<?php echo FRONT_ROOT."Keeper/showModifyView" ?> " method="post">
-    <table style="text-align:center;">
-        <thead>
-            <tr>
-                <th style="width: 150px;">Pet Size</th>
-                <th style="width: 100px;">Initial Date</th>
-                <th style="width: 100px;">End Date</th>
-                <th style="width: 150px;">Days</th>
-                <th style="width: 150px;">Price</th>
-                <th style="width: 100px;"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><?php echo $keeper->getPetSize()?></td>
-                <td><?php echo $keeper->getInitialDate() ?></td>
-                <td><?php echo $keeper->getEndDate() ?></td>
-                <td><?php foreach($keeper->getDays() as $day){echo $day;} ?></td>
-                <td><?php echo $keeper->getPrice()?></td>
-                <td><button type="submit"> Modify </button></td>
-            </tr>
-        </tbody>
-    </table>
+  <h2>Keeper Profile  </h2>
+    <div class="col-lg-8" ">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3" style="color: black;">
+                <p class="mb-0">Pet Size</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0"><?php echo $keeper->getPetSize()?></p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3" style="color: black;">
+                <p class="mb-0">Initial Date</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0"><?php echo $keeper->getInitialDate() ?></p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+            <div class="col-sm-3" style="color: black;">
+                <p class="mb-0" col>End Date</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0"><?php echo $keeper->getEndDate() ?></p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+            <div class="col-sm-3" style="color: black;">
+                <p class="mb-0">Days</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0"><?php foreach($keeper->getDays() as $day){echo ucfirst($day); echo "<br>";} ?></p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+            <div class="col-sm-3" style="color: black;">
+                <p class="mb-0">Price</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0"><?php echo $keeper->getPrice()?></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
     <p>CAMBIAR FRONT</p>
-</form>
 </div>

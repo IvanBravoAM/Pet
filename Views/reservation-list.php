@@ -18,6 +18,7 @@ if($_SESSION['loggedUser']->getUserType() == "Owner") include('nav-bar-owner.php
                               <th>Days</th>
                               <th>Reservation Status</th>
                               <th>Total Price</th>
+                              <th>Actions</th>
                          </thead>
                          <tbody>
                          <?php
@@ -25,12 +26,12 @@ if($_SESSION['loggedUser']->getUserType() == "Owner") include('nav-bar-owner.php
                          ?>
                          <?php
                          if (!empty($ReservationList)) {
-                              foreach ($ReservationList as $Reservation) {
+                              foreach ($ReservationList as $Reservation) {if($Reservation->getStatus() != 'inactive'){
                          ?>
-                            <form action="<?php echo FRONT_ROOT . "Reservation/Action" ?>" method="post">
+                            <form action="<?php echo FRONT_ROOT . "Reservation/Inactivate" ?>" method="post">
                                 <tr>
                                         <td>
-                                            <a class="btn btn-info" href="<?php echo FRONT_ROOT . "Keeper/    ShowProfile/" . $Reservation->getIdKeeper() ?>">
+                                            <a class="btn btn-info" href="<?php echo FRONT_ROOT . "Keeper/showProfile/" . $Reservation->getIdKeeper() ?>">Show Keeper Profile
                                             </a>
                                         </td>
                                         <td><?php echo $Reservation->getInitialDate()?></td>
@@ -39,18 +40,18 @@ if($_SESSION['loggedUser']->getUserType() == "Owner") include('nav-bar-owner.php
                                         <td><?php echo $Reservation->getStatus()?></td>
                                         <td><?php echo $Reservation->gettotalPrice() ?></td>
                                         <td>
-                                            <a class="btn btn-info" href="<?php echo FRONT_ROOT . "Reservation/ShowModifyView/" . $Reservation->getId() ?>">Modify
-                                            </a>
-                                            <button type="submit" name="inactivate" class="btn btn-danger" value="<?php echo $Reservation->getId() ?>">X</button>
+                                        
+                                        <button type="submit" name="inactivate" class="btn btn-danger" value="<?php echo $Reservation->getId() ?>">Delete</button>
                                             <?php if($_SESSION['loggedUser']->getUserType()=='Keeper'){?>
-                                               <button type="submit" name="confirm" class="btn btn-info" value="<?php echo $Reservation->getId() ?>">Confirm</button> 
+                                               <!-- <button type="submit" name="confirm" class="btn btn-info" value="<?php echo $Reservation->getId() ?>">Confirm</button>  -->
+                                               <a class="btn btn-info" href="<?php echo FRONT_ROOT . "Reservation/Confirm/" . $Reservation->getId() ?>">Confirm</a>
                                             <?php } ?>
                                             
                                         </td>
                                 </tr>
                             </form>
                          <?php
-                              }
+                              }}
                          } else {
                               echo "<div class='container alert alert-warning'>
                          <div class='content text-center'>
@@ -62,22 +63,5 @@ if($_SESSION['loggedUser']->getUserType() == "Owner") include('nav-bar-owner.php
                          </tbody>
                     </table>
           </div>
-          <div class="container p-3 my-3 bg-dark text-white">
-            <form action="<?php echo FRONT_ROOT . "Reservation/showFilterListView" ?>" method="get">
-                    <h3>Filter Reservations by date</h3>
-                    Start Date
-                    <input type="Date" name="initialDate" required> 
-                    End Date
-                    <input type="Date" name="endDate" required> 
-                    <input class="btn btn-outline-info" type="submit" value="Filter">
-                </form> 
-            </div> 
-          <div class="mb-3">
-                <div>
-                    <a class="btn btn-success" href="<?php echo FRONT_ROOT . "Reservation/ShowAddView" ?>">
-                        Add New Reservation
-                    </a>
-                </div>
-            </div>
      </section>
 </main>

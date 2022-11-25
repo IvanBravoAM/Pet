@@ -5,6 +5,7 @@ include_once(VIEWS_PATH . "nav-bar-owner.php");
 <main class="py-5">
      <section id="listado" class="mb-5">
           <div class="container">
+          <?php if(!empty($message)){?> <div class="container-fluid"><p class = "alert alert-danger"><?php echo $message ?></p></div><?php  }?>
                <h2 class="mb-4">My Pets</h2>
                <?php
                if (!empty($petList)) {
@@ -32,32 +33,43 @@ include_once(VIEWS_PATH . "nav-bar-owner.php");
                             <form action="<?php echo FRONT_ROOT . "Pet/Inactivate" ?>" method="post">
                                 <tr>
                                         <td><?php echo $pet->getName() ?></td>
-                                        <td><?php echo $pet->getPetType()->getName()?></td>
+                                        <?php foreach ($petTypeList as $petType) {
+                                             if($petType->getId() == $pet->getPetType()->getId()){?>
+                                             <td><?php echo $petType->getName()?></td><?php }}
+                                        ?>
                                         <td><?php echo $pet->getBreed()?></td>
                                         <td><?php echo $pet->getSize()?></td>
                                         <td><?php echo $pet->getDescription() ?></td>
                                         <td>
                                             <?php
-                                            if ($pet->getPhoto() != null) {} else {echo "There is currently no image";}
+                                            if($pet->getPhoto() != null){?>
+                                             <a href="<?php echo $pet->getPhoto()?>" target="_blank"><img src="<?php echo $pet->getPhoto()?>" alt="alternatetext" style="width:60px;height:60px;"></a><?php }
+                                            else {echo "There is currently no image";}
                                             ?>
                                         </td>
                                         <td>
-                                            <?php
-                                            if ($pet->getVaccines() != null) {} else {echo "There is currently no vaccines";}?>
+                                             <?php
+                                            if($pet->getVaccines() != null){?>
+                                             <a href="<?php echo $pet->getVaccines()?>" target="_blank"><img src="<?php echo $pet->getVaccines()?>" alt="alternatetext" style="width:60px;height:60px;"></a><?php }
+                                            else {echo "There is currently no vaccines";}
+                                            ?>
                                         </td>
                                         <td>
-                                            <?php
-                                            if ($pet->getVideo() != null) {} else {
-                                            echo "There is currently no video";}?>
-                                        <td>
-                                        <input value="<?php echo $pet->getId() ?>" type="checkbox" class="btn-check" name="selectedPet" id="selectedPet" autocomplete="off" >
-                                        <label class="btn btn-outline-success" for="selectedPet">Select</label>
-                                            <a class="btn btn-info" href="<?php echo FRONT_ROOT . "Pet/ShowModifyView/" . $pet->getId() ?>">
-                                            </a>
-                                            <button type="submit" name="inactivate" class="btn btn-danger" value="<?php echo $pet->getId() ?>">X</button>
+                                             <?php
+                                            if($pet->getVideo() != null){?>
+                                             <a href="<?php echo $pet->getVideo()?>" target="_blank">Watch Video</a><?php }
+                                            else {echo "There is currently no image";}
+                                            ?>
                                         </td>
-                                </tr>
+                                        <td>
+                                        
+                                            <a class="btn btn-info" href="<?php echo FRONT_ROOT . "Pet/ShowModifyView/" . $pet->getId() ?>">Modify</a>
+                                            <button type="submit" name="inactivate" class="btn btn-danger" value="<?php echo $pet->getId() ?>">Inactivate</button>
+                                        </td>
+                                   </tr>
+                                
                             </form>
+                            
                          <?php
                               }}
                          } else {
